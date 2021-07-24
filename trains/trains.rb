@@ -46,13 +46,6 @@ class Train
     def stop
         self.speed = 0    # Может тормозить (сбрасывать скорость до нуля)
     end
-
- 
-
-    def show_size
-        puts @size # Может возвращать количество вагонов
-    end
-    
     
     def add_carriage 
       if @speed == 0                   #  Может прицеплять/отцеплять вагоны (по одному вагону за операцию, 
