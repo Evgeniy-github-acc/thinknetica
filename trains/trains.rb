@@ -42,17 +42,9 @@ class Train
         @speed = 0
     end
     
-  
-    def set_speed (speed)
-        @speed = speed              # Может набирать скорость
-    end
-
-    def show_speed     
-        puts @speed             # Может возвращать текущую скорость
-    end
 
     def stop
-        self.set_speed (0)    # Может тормозить (сбрасывать скорость до нуля)
+        self.speed = 0    # Может тормозить (сбрасывать скорость до нуля)
     end
 
  
