@@ -17,8 +17,9 @@ class Station
         @trains_list.each{|train| puts train.number} 
     end    
 
-    def train_depature (train)    #Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
+    def train_depature (train, station)    #Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
         @trains_list.delete train
+        train.station = station
     end    
 
     def trains_types
@@ -68,41 +69,42 @@ class Train
     def set_route(route)                    # Может принимать маршрут следования (объект класса Route) 
         @route = route
         @station = route.first_station         # При назначении маршрута поезду, поезд автоматически помещается на первую станцию в маршруте.
-        route.first_station.train_arrive (self) 
+        @station.train_arrive (self) 
     end
 
     def go_forward 
-        if @station == @route.last_station                        # Может перемещаться между станциями, указанными в маршруте. 
-            puts "The last station! Go back or set the new route" # Перемещение возможно вперед и назад, но только на 1 станцию за раз.
-        else
-            @station.train_depature (self)
-            i = @route.stations.index (@station) 
-            @station = @route.stations[i+1]
-            @station.train_arrive (self)
+        next_station = get_stations.last
+        if next_station
+            @station.train_depature self, next_station          # Может перемещаться между станциями, указанными в маршруте.
+        else                                                    # Перемещение возможно вперед и назад, но только на 1 станцию за раз.
+          puts "The last station! Go back or set the new route"
         end
     end   
 
     def go_back
-        if @station == route.first_station
-            puts "The first station! Go forward or set the new route"
-        else
-            @station.train_depature (self)
-            i = @route.stations.index (@station) 
-            @station = @route.stations[i-1]
-            @station.train_arrive (self)
-            
+        previous_station = get_stations.first
+        if previous_station
+            @station.train_depature self, previous_station
+        else            
+          puts "The first station! Go forward or set the new route"
         end
     end   
 
     def get_stations                                                # Возвращать предыдущую станцию, текущую, следующую, на основе маршрута                            
-        current_station = @station   
-        next_station = @route.stations[@route.stations.index(@station)+1]
-        previous_station = @route.stations[@route.stations.index(@station)-1]
-        puts "Now at #{current_station.name}, next is #{next_station.name}, previous was #{previous_station.name}"
+        current_station = @station  
+        if current_station == route.last_station
+            next_station = nil
+        else next_station = @route.stations[@route.stations.index(@station)+1]
+        end
+
+        if current_station == route.first_station
+            previous_station = nil
+        else  previous_station = @route.stations[@route.stations.index(@station)-1]
+        end
+                    
+        [previous_station, current_station, next_station]
     end
-
 end
-
 
 # Класс Route (Маршрут):
 
