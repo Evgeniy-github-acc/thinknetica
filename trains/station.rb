@@ -23,9 +23,9 @@ class Station
     end    
 
     def trains_types
-       passenger = @trains_list.select{|train| train.type == 1}  #Может возвращать список поездов на станции по типу кол-во грузовых, пассажирских
-       freight = @trains_list.select{|train| train.type == 2}
+       passenger = @trains_list.select{|train| train.type == :passenger}  #Может возвращать список поездов на станции по типу кол-во грузовых, пассажирских
+       cargo = @trains_list.select{|train| train.type == :cargo}
        passenger.each {|i| puts i.number}
-       freight.each {|i| puts i.number}
+       cargo.each {|i| puts i.number}
     end
 end
