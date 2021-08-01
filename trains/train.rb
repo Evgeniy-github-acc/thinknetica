@@ -1,36 +1,3 @@
-
-# Класс Station (Станция):
-
-class Station
-    attr_reader :trains_list, :name
-
-    def initialize (name)
-        @name = name        # Имеет название, которое указывается при ее создании
-        @trains_list = []   # Может возвращать список всех поездов на станции, находящиеся в текущий момент
-    end   
-    
-    def train_arrive (train)
-        @trains_list << train   #Может принимать поезда (по одному за раз)
-    end
-
-    def trains_on_station   
-        @trains_list.each{|train| puts train.number} 
-    end    
-
-    def train_depature (train, station)    #Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
-        @trains_list.delete train
-        train.station = station
-    end    
-
-    def trains_types
-       passenger = @trains_list.select{|train| train.type == 1}  #Может возвращать список поездов на станции по типу кол-во грузовых, пассажирских
-       freight = @trains_list.select{|train| train.type == 2}
-       passenger.each {|i| puts i.number}
-       freight.each {|i| puts i.number}
-    end
-end
-
-
 #   Класс Train (Поезд):
 class Train
     attr_reader :number, :size, :type
@@ -106,26 +73,3 @@ class Train
     end
 end
 
-# Класс Route (Маршрут):
-
-class Route
-    attr_reader :first_station, :last_station, :stations
-    
-    def initialize first_station, last_station #Имеет начальную и конечную станцию, а также список промежуточных станций. 
-        @first_station = first_station         #Начальная и конечная станции указываютсся при создании маршрута, 
-        @last_station = last_station           # а промежуточные могут добавляться между ними.
-        @stations = [@first_station, @last_station]
-    end
-    
-    def add_station (station)         #Может добавлять промежуточную станцию в список
-        @stations.insert(-2, station) 
-    end
-
-    def delete_station (station)  # Может удалять промежуточную станцию из списка
-        @stations.delete station
-    end
-
-    def show_stations
-        @stations.each{|station| puts station.name} #Может выводить список всех станций по-порядку от начальной до конечной
-    end    
-end
