@@ -6,15 +6,23 @@ require_relative 'passenger_train.rb'
 require_relative 'carriage.rb'
 require_relative 'carriage_cargo.rb'
 require_relative 'carriage_passenger.rb'
+require_relative 'main_menu.rb'
 
-#puts "Wellcome to railway station"
-#puts "Make your choise:
+menu = Menu.new
+train_menu = TrainMenu.new
+station_menu = SationsMenu.new
+routes_menu = RoutesMenu.new
+case menu.show 
+    when '1' 
+        train_menu.navigate 
+    when '2'
+        station_menu.show
+    when '3'
+        routes_menu.show
+    when '4'
+        exit
+end
+        
 
-#        1. Trains.
-#        2. Stations.
- #       3. Routes.
 
-  #  or press Enter to exit  
- #       "
 
-# gets 
