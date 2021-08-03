@@ -1,4 +1,4 @@
-class Carrige_cargo < Carriage
+class CarrigeCargo < Carriage
     def initialize type
         super
         @type = :cargo
