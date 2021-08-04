@@ -9,20 +9,31 @@ require_relative 'carriage_passenger.rb'
 require_relative 'main_menu.rb'
 
 menu = Menu.new
-train_menu = TrainMenu.new
-station_menu = SationsMenu.new
-routes_menu = RoutesMenu.new
-case menu.show 
-    when '1' 
-        train_menu.navigate 
-    when '2'
-        station_menu.show
-    when '3'
-        routes_menu.show
-    when '4'
-        exit
-end
-        
+
+loop do
+    case menu.show
+        when '1' 
+            menu.create_station 
+        when '2'
+            menu.create_train
+        when '3'
+            menu.create_route
+        when '4'
+            menu.create_cars
+        when '5' 
+             menu.set_route_to_train
+        when '6'
+            menu.add_cars
+        when '7'
+            menu.delete_cars
+        when '8'
+            menu.move_train    
+        when '9' 
+             menu.station_trains_view
+        when '10'
+            exit
+    end
+end        
 
 
 
