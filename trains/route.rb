@@ -1,7 +1,8 @@
 # Класс Route (Маршрут):
 
 class Route
-    attr_reader :first_station, :last_station, :stations
+    attr_reader :first_station, :last_station 
+    attr_accessor :stations
     
     def initialize first_station, last_station #Имеет начальную и конечную станцию, а также список промежуточных станций. 
         @first_station = first_station         #Начальная и конечная станции указываютсся при создании маршрута, 
