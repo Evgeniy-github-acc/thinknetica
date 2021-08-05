@@ -74,9 +74,9 @@ class Train
         end
     end   
  
-   private
+   private                  
 
-   def get_stations                                                # Возвращать предыдущую станцию, текущую, следующую, на основе маршрута                            
+   def get_stations         # метод помещен в private, так как является внутренним методом класса, не вызывается ни его экземплярами, ни в его наследниках                                                             
         current_station = @station  
         if current_station == @route.last_station                   
             next_station = nil
