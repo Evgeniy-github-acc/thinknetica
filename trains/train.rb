@@ -6,17 +6,16 @@ class Train
     @number = number
     @speed = 0
     @carriages = []
-    @type = 0
   end
 
   def carriage_fits?(carriage)
-    carriage.type == self.type
+    carriage.type == type
   end
 
   def add_carriage(carriage)
-    puts 'You must stop first' unless @speed.zero?
-    puts "You can't use this type of carriage for this train" unless carriage_fits?(carriage) 
-    @carriages << carriage if @speed.zero? && carriage_fits?(carriage)
+    puts 'You must stop first' unless speed.zero?
+    puts "You can't use this type of carriage for this train" unless carriage_fits?(carriage)
+    carriages << carriage if speed.zero? && carriage_fits?(carriage)
   end
 
   def stop
@@ -24,8 +23,8 @@ class Train
   end
         
   def cut_carriage(carriage)
-    if @carriages.!empty?
-      if @speed.zero?
+    if carriages.size > 0 
+      if speed.zero?
         carriages.delete(carriage)
       else puts 'You must stop first'
       end
@@ -34,9 +33,9 @@ class Train
   end
         
   def set_route(route)
-    @route = route
-    @station = route.first_station
-    @station.train_arrive self
+    self.route = route
+    self.station = route.first_station
+    station.train_arrive(self)
   end
 
   def go_forward
@@ -53,7 +52,7 @@ class Train
   def go_back
     previous_station = get_stations.first
     if previous_station
-      @station.train_depature(self)
+      station.train_depature(self)
       previous_station.train_arrive(self)
       self.station = previous_station
     else
@@ -63,11 +62,11 @@ class Train
   
   private
 
-# Метод помещен в private, так как является внутренним методом класса, не вызывается его экземплярами и в его наследниках
+  # Метод помещен в private, так как является внутренним методом класса, не вызывается его экземплярами и в его наследниках
   def get_stations
-    current_station = @station
-    current_station == @route.last_station ? next_station = nil : next_station = @route.stations[@route.stations.index(@station) + 1]
-    current_station == @route.first_station ? previous_station = nil : previous_station = @route.stations[@route.stations.index(@station) - 1]
+    current_station = station
+    current_station == route.last_station ? next_station = nil : next_station = route.stations[route.stations.index(station) + 1]
+    current_station == route.first_station ? previous_station = nil : previous_station = route.stations[route.stations.index(station) - 1]
     [previous_station, current_station, next_station]
   end
 end
