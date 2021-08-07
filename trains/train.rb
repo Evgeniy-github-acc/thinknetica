@@ -1,11 +1,23 @@
 class Train
+  include Producer
+
   attr_reader :number, :type
   attr_accessor :route, :carriages, :station, :speed
+
+  @@train_instances = []
+
+  def self.find(number)
+    @@train_instances.each do |train|
+      return train if train.number == number
+    end
+    nil
+  end
     
   def initialize(number)
     @number = number
     @speed = 0
     @carriages = []
+    @@train_instances << self
   end
 
   def carriage_fits?(carriage)
