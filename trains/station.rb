@@ -1,4 +1,6 @@
 class Station
+  include InstanceCounter
+
   attr_reader :name
   attr_accessor :trains_list
 
@@ -8,10 +10,11 @@ class Station
     @@station_instances
   end
   
-  def initialize (name)
+  def initialize(name)
     @name = name
     @trains_list = []
     @@station_instances << self
+    register_instance
   end
 
   def train_arrive(train)

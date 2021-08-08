@@ -1,5 +1,6 @@
 class Train
   include Producer
+  include InstanceCounter
 
   attr_reader :number, :type
   attr_accessor :route, :carriages, :station, :speed
@@ -18,6 +19,7 @@ class Train
     @speed = 0
     @carriages = []
     @@train_instances << self
+    register_instance
   end
 
   def carriage_fits?(carriage)

@@ -1,4 +1,5 @@
-require_relative 'producer.rb'
+require_relative 'modules/instance_counter.rb'
+require_relative 'modules/producer.rb'
 require_relative 'station.rb'
 require_relative 'train.rb'
 require_relative 'route.rb'
