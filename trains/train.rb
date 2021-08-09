@@ -8,10 +8,7 @@ class Train
   @@train_instances = []
 
   def self.find(number)
-    @@train_instances.each do |train|
-      return train if train.number == number
-    end
-    nil
+    @@train_instances.find { |train| train.number = number }
   end
     
   def initialize(number)
