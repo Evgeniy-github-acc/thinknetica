@@ -1,5 +1,6 @@
 class Station
   include InstanceCounter
+  include Validation
 
   attr_reader :name
   attr_accessor :trains_list
@@ -15,6 +16,11 @@ class Station
     @trains_list = []
     @@station_instances << self
     register_instance
+    validate!
+  end
+
+  def validate! 
+    raise "Wrong name format" if name !~ /^[A-Z]{1}.+/
   end
 
   def train_arrive(train)

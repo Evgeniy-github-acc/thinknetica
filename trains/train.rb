@@ -1,11 +1,16 @@
 class Train
   include Producer
   include InstanceCounter
+  include Validation
 
   attr_reader :number, :type
   attr_accessor :route, :carriages, :station, :speed
 
   @@train_instances = []
+  
+  def number_format
+    number_format = /^[a-z0-9]{3}-?[a-z0-9]{2}/i
+  end
 
   def self.find(number)
     @@train_instances.find { |train| train.number = number }
@@ -17,8 +22,9 @@ class Train
     @carriages = []
     @@train_instances << self
     register_instance
+    validate!
   end
-
+  
   def carriage_fits?(carriage)
     carriage.type == type
   end

@@ -1,3 +1,4 @@
+require_relative 'modules/validation.rb'
 require_relative 'modules/instance_counter.rb'
 require_relative 'modules/producer.rb'
 require_relative 'station.rb'

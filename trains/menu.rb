@@ -65,14 +65,22 @@ class Menu
             1. Cargo
             2. Passenger'
     type = gets.chomp
-    if type == '1'
-      train = CargoTrain.new number
+    
+    begin
+    case type
+    when '1' 
+    train = CargoTrain.new number
       trains << train
-    elsif type == '2'
+      puts "Train #{train.type.to_s} number #{train.number.to_s} created"
+    when '2'
       train = PassengerTrain.new number
       trains << train
-    else puts 'Wrong type'
+      puts "Train #{train.type.to_s} number #{train.number.to_s} created"
     end
+    rescue RuntimeError => error
+      puts "Exception: #{error.inspect}"
+      puts error.backtrace
+    end  
   end
 
   def create_cars
