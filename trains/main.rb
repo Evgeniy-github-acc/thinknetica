@@ -34,7 +34,7 @@ loop do
   when 9 
     menu.station_trains_view
   when 10
-    exit
+    break
   end
 end        
 

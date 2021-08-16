@@ -10,25 +10,25 @@ class Menu
 
   def show_trains
     puts 'Trains:'
-    trains.each_with_index { |train, index| puts "#{index + 1}  |№ #{train.number}\t|carriages:  #{train.carriages.length}\t|type: \t#{train.type.to_s}" }
+    trains.each_with_index { |train, index| puts "#{index + 1}  |№ #{train.number}\t|carriages:  #{train.carriages.length}\t|type: \t#{train.type.to_s}" } unless trains.empty?
     puts "\n"
   end
 
   def show_stations
     puts 'Stations: '
-    stations.each_with_index { |station, index| puts "#{index + 1}\t#{station.name}\t|trains #{station.trains_list.size}" }
+    stations.each_with_index { |station, index| puts "#{index + 1}\t#{station.name}\t|trains #{station.trains.size}" } unless stations.empty?
     puts "\n"
   end
 
   def show_cars
     puts 'Carriages available: '
-    cars.each_with_index { |car, index| puts "#{index + 1}  |№ #{car.number}\t|type:  #{car.type.to_s}" }
+    cars.each_with_index { |car, index| puts "#{index + 1}  |№ #{car.number}\t|type:  #{car.type.to_s}" } unless cars.empty?
     puts "\n"
   end
     
   def show_routes
     puts 'Routes available: '
-    routes.each_with_index { |route, index| puts " #{index + 1} | #{route.first_station.name} - #{route.last_station.name}\t|" }
+    routes.each_with_index { |route, index| puts " #{index + 1} | #{route.stations.first.name} - #{route.stations.last.name}\t|" } unless routes.empty?
     puts "\n"
   end
   
