@@ -34,6 +34,10 @@ loop do
   when 9 
     menu.station_trains_view
   when 10
+    menu.show_trains_cars
+  when 11
+    menu.fill_cars
+  when 12
     break
   end
 end        

@@ -35,6 +35,10 @@ class Station
     trains.delete(train)
   end
 
+  def take_each_train(&block)
+    trains.each { |train| block.call(train) }
+  end
+
   def trains_types
     passenger = trains.select { |train| train.type == :passenger }
     cargo = trains.select { |train| train.type == :cargo }

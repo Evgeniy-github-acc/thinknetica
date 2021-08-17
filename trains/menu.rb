@@ -11,25 +11,53 @@ class Menu
   def show_trains
     puts 'Trains:'
     trains.each_with_index { |train, index| puts "#{index + 1}  |№ #{train.number}\t|carriages:  #{train.carriages.length}\t|type: \t#{train.type.to_s}" } unless trains.empty?
-    puts "\n"
+    puts
   end
 
   def show_stations
     puts 'Stations: '
     stations.each_with_index { |station, index| puts "#{index + 1}\t#{station.name}\t|trains #{station.trains.size}" } unless stations.empty?
-    puts "\n"
+    puts
   end
 
   def show_cars
     puts 'Carriages available: '
     cars.each_with_index { |car, index| puts "#{index + 1}  |№ #{car.number}\t|type:  #{car.type.to_s}" } unless cars.empty?
-    puts "\n"
+    puts
   end
     
   def show_routes
     puts 'Routes available: '
     routes.each_with_index { |route, index| puts " #{index + 1} | #{route.stations.first.name} - #{route.stations.last.name}\t|" } unless routes.empty?
-    puts "\n"
+    puts
+  end
+  
+  def show_trains_cars
+    trains.each do |train| 
+      puts "#{train.number}  "
+      if train.carriages.empty?
+        puts "Train is empty"
+      else
+        puts "#{train.carriages.length} cars "  
+        case train.type
+        when :cargo      
+          train.take_each_carriage { |carriage| puts "#{carriage.number} type: #{carriage.type} filed #{carriage.filled_volume} free #{carriage.free_volume}" }
+        when :passenger
+          train.take_each_carriage { |carriage| puts "#{carriage.number} type: #{carriage.type} filed #{carriage.filled_seats} free #{carriage.free_seats}" }
+        end
+      end 
+    end
+  end
+
+  def station_trains_view
+    stations.each do |station| 
+      puts "#{station.name}  "
+      if station.trains.empty?
+        puts "Station is empty"
+      else
+      station.take_each_train { |train| puts "#{train.number} #{train.type}  #{train.carriages.length}" }
+      end 
+    end
   end
   
   def items
@@ -43,7 +71,9 @@ class Menu
       7 => ' Cut carriages',
       8 => ' Move train',
       9 => ' View trains on stations',
-      10 => 'Exit'
+      10 => ' View carriages on trains',
+      11 => 'Fill carriages',
+      12 => 'Exit'
     }
   end
 
@@ -55,7 +85,15 @@ class Menu
 
       puts 'Make a choise from the list above'
     end
-  end   
+  end
+  
+  def create_station
+    show_stations if @stations
+    puts 'Enter station name'
+    name = gets.chomp
+    station = Station.new(name)
+    stations << station
+  end
 
   def create_train
     show_trains
@@ -83,66 +121,6 @@ class Menu
     end  
   end
 
-  def create_cars
-    show_cars
-    puts 'Enter carriage number'
-    number = gets.chomp
-    puts 'Enter carriage type
-        1. Cargo
-        2. Passenger'
-    type = gets.chomp
-    if type == '1'
-      car = CargoCarrige.new number
-      cars << car
-    elsif type == '2'
-      car = PassengerCarrige.new number
-      cars << car
-    else puts 'Wrong type'
-    end
-  end
-
-  def add_cars
-    if @cars.empty? || @trains.empty?
-      puts 'Create trains and cars first'
-      gets
-    end   
-    show_trains
-    show_cars
-    puts 'Select train'
-    train_list_index = gets.chomp.to_i - 1
-    puts 'Select carriage'
-    car_list_index = gets.chomp.to_i - 1
-    trains[train_list_index].add_carriage(cars[car_list_index])
-    cars.delete_at(car_list_index) if trains[train_list_index].carriage_fits?(cars[car_list_index])
-  end
-
-  def delete_cars
-    show_trains
-    puts 'Select train'
-    train_list_index = gets.chomp.to_i - 1
-    trains[train_list_index].carriages.each_with_index { |car, index| puts "#{index + 1} |№ #{car.number}" }
-    puts 'Select carriage'
-    car_list_index = gets.chomp.to_i - 1
-    train = trains[train_list_index]
-    train.cut_carriage(train.carriages[car_list_index])
-    cars << train.carriages[car_list_index]
-  end
-
-  def create_station
-    show_stations if @stations
-    puts 'Enter station name'
-    name = gets.chomp
-    station = Station.new(name)
-    stations << station
-  end
-    
-  def station_trains_view
-    show_stations
-    puts 'Select station'
-    selected_station = gets.chomp.to_i - 1
-    stations[selected_station].trains_types
-  end
-   
   def create_route
     show_routes
     if stations.size < 2
@@ -187,6 +165,28 @@ class Menu
     end
   end
 
+  def create_cars
+    show_cars
+    puts 'Enter carriage type
+        1. Cargo
+        2. Passenger'
+    type = gets.chomp
+    puts 'Enter carriage number'
+    number = gets.chomp
+    if type == '1'
+      puts "Enter capacity: "
+      volume = gets.chomp.to_f
+      car = CargoCarriage.new(number, volume)
+      cars << car
+    elsif type == '2'
+      puts "How much seats?: "
+      seats = gets.chomp.to_i
+      car = PassengerCarriage.new(number, seats)
+      cars << car
+    else puts 'Wrong type'
+    end
+  end
+
   def set_route_to_train
     if trains.empty? || routes.empty?
       puts 'Create trains and routes first'
@@ -201,6 +201,33 @@ class Menu
     end
   end
 
+  def add_cars
+    if @cars.empty? || @trains.empty?
+      puts 'Create trains and cars first'
+      return
+    end   
+    show_trains
+    show_cars
+    puts 'Select train'
+    train_list_index = gets.chomp.to_i - 1
+    puts 'Select carriage'
+    car_list_index = gets.chomp.to_i - 1
+    trains[train_list_index].add_carriage(cars[car_list_index])
+    cars.delete_at(car_list_index) if trains[train_list_index].carriage_fits?(cars[car_list_index])
+  end
+
+  def delete_cars
+    show_trains
+    puts 'Select train'
+    train_list_index = gets.chomp.to_i - 1
+    trains[train_list_index].carriages.each_with_index { |car, index| puts "#{index + 1} |№ #{car.number}" }
+    puts 'Select carriage'
+    car_list_index = gets.chomp.to_i - 1
+    train = trains[train_list_index]
+    train.cut_carriage(train.carriages[car_list_index])
+    cars << train.carriages[car_list_index]
+  end
+      
   def move_train
     if trains.empty?
       puts 'There is no trains to move'
@@ -227,4 +254,20 @@ class Menu
         end
     end
   end
+
+  def fill_cars
+    show_cars
+    puts 'Select car'
+    selected_car = gets.chomp.to_i - 1
+    case cars[selected_car].type
+    when :cargo
+      puts "How much to load?"
+      volume = gets.chomp.to_f
+      cars[selected_car].load(volume)
+    when :passenger
+      cars[selected_car].take_seat
+      puts "One seat taken, #{cars[selected_car].free_seats} free"
+    end
+  end
+
 end

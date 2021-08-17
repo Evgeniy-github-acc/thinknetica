@@ -75,7 +75,11 @@ class Train
   
   def validate!
     raise "Object number has invalid format try to create again"   if number !~ self.number_format
-  end  
+  end
+
+  def take_each_carriage(&block)
+    carriages.each { |carriage| block.call(carriage) }
+  end
   
   private
 
