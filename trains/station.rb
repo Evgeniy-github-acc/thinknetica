@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Station
   include InstanceCounter
   include Validation
@@ -7,10 +9,10 @@ class Station
 
   @@stations = []
 
-  def self.all 
+  def self.all
     @@stations
   end
-  
+
   def initialize(name)
     @name = name
     @trains = []
@@ -19,8 +21,8 @@ class Station
     register_instance
   end
 
-  def validate! 
-    raise "Wrong name format" if name !~ /^[A-Z]{1}.+/
+  def validate!
+    raise 'Wrong name format' if name !~ /^[A-Z]{1}.+/
   end
 
   def train_arrive(train)

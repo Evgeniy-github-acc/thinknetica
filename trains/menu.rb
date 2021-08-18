@@ -197,7 +197,7 @@ class Menu
       show_routes
       puts 'Select route'
       route_index = gets.chomp.to_i - 1
-      trains[train_index].set_route(routes[route_index])
+      trains[train_index].route_set(routes[route_index])
     end
   end
 

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class PassengerCarriage < Carriage
   attr_reader :max_seats
   attr_accessor :filled_seats
-  
+
   def initialize(number, max_seats)
     @number = number
     @type = :passenger
@@ -11,7 +13,8 @@ class PassengerCarriage < Carriage
   end
 
   def take_seat
-    raise "Carriage is full" if filled_seats == max_seats
+    raise 'Carriage is full' if filled_seats == max_seats
+
     @filled_seats += 1
   end
 
