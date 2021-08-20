@@ -13,7 +13,7 @@ class CargoCarriage < Carriage
   end
 
   def load(volume)
-    raise "Carriage hasn't enough place" if filled_volume + max_volume >= max_volume
+    raise "Carriage hasn't enough place" if filled_volume + volume >= max_volume
 
     filled_volume + volume
   end

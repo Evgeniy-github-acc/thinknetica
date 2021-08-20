@@ -1,46 +1,64 @@
-require_relative 'modules/validation.rb'
-require_relative 'modules/instance_counter.rb'
-require_relative 'modules/producer.rb'
-require_relative 'station.rb'
-require_relative 'train.rb'
-require_relative 'route.rb'
-require_relative 'cargo_train.rb'
-require_relative 'passenger_train.rb'
-require_relative 'carriage.rb'
-require_relative 'cargo_carriage.rb'
-require_relative 'passenger_carriage.rb'
-require_relative 'menu.rb'
+# frozen_string_literal: true
 
-menu = Menu.new
+require_relative 'interface/train_methods'
+require_relative 'interface/station_methods'
+require_relative 'interface/route_methods'
+require_relative 'interface/carriage_methods'
+require_relative 'interface/menu'
+require_relative 'manage'
+require_relative 'modules/validation'
+require_relative 'modules/instance_counter'
+require_relative 'modules/producer'
+require_relative 'station'
+require_relative 'train'
+require_relative 'route'
+require_relative 'cargo_train'
+require_relative 'passenger_train'
+require_relative 'carriage'
+require_relative 'cargo_carriage'
+require_relative 'passenger_carriage'
 
-loop do
-  case menu.show
-  when 1 
-    menu.create_station 
-  when 2
-    menu.create_train
-  when 3
-    menu.create_route
-  when 4
-    menu.create_cars
-  when 5 
-    menu.set_route_to_train
-  when 6
-    menu.add_cars
-  when 7
-    menu.delete_cars
-  when 8
-    menu.move_train    
-  when 9 
-    menu.station_trains_view
-  when 10
-    menu.show_trains_cars
-  when 11
-    menu.fill_cars
-  when 12
-    break
-  end
-end        
+main_menu = Menu.new
+train_menu = Menu.new
+carriage_menu = Menu.new
+station_menu = Menu.new
+route_menu = Menu.new
 
+manage = Manage.new
 
+train_menu.items = Items.new
+train_menu.items.functions = { 'View' => proc { manage.show_trains },
+                               'Create' => proc { manage.create_train },
+                               'Add Carriage' => proc { manage.add_carriages },
+                               'Delete Carriage' => proc { manage.delete_carriages },
+                               'View Carriages on Trains' => proc { manage.show_trains_carriages },
+                               'Set Route' => proc { manage.route_to_train },
+                               'Move' => proc { puts manage.move_train_menu },
+                               'Back' => proc { main_menu.navigate } }
 
+carriage_menu.items = Items.new
+carriage_menu.items.functions = { 'View' => proc { manage.show_carriages(manage.carriages) },
+                                  'Create' => proc { manage.create_carriage },
+                                  'Load' => proc { manage.fill_carriages },
+                                  'Back' => proc { main_menu.navigate } }
+
+station_menu.items = Items.new
+station_menu.items.functions = { 'View' => proc { manage.station_trains_view },
+                                 'Create' => proc { manage.create_station },
+                                 'Back' => proc { main_menu.navigate } }
+
+route_menu.items = Items.new
+route_menu.items.functions = { 'View' => proc { manage.show_routes },
+                               'Create' => proc { manage.create_route },
+                               'Add stations' => proc { manage.add_station_route },
+                               'Delete stations' => proc { manage.delete_station_route },
+                               'Back' => proc { main_menu.navigate } }
+
+main_menu.items = Items.new
+main_menu.items.functions = { 'Trains' => proc { train_menu.navigate },
+                              'Carriages' => proc { carriage_menu.navigate },
+                              'Stations' => proc { station_menu.navigate },
+                              'Routes' => proc { route_menu.navigate },
+                              'Exit' => proc { exit } }
+
+main_menu.navigate
