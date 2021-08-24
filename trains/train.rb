@@ -10,10 +10,6 @@ class Train
 
   @@trains = []
 
-  def number_format
-    /^[a-z0-9]{3}-?[a-z0-9]{2}/i
-  end
-
   def self.find(number)
     @@train_instances.find { |train| train.number == number }
   end
@@ -22,6 +18,8 @@ class Train
     @number = number
     @speed = 0
     @carriages = []
+    self.class.validate('number', 'attr_type',  String)
+    self.class.validate('number', 'attr_format',  /^[a-z0-9]{3}-?[a-z0-9]{2}/i)
     validate!
     @@trains << self
     register_instance
@@ -75,9 +73,9 @@ class Train
     self.station = previous
   end
 
-  def validate!
-    raise 'Object number has invalid format try to create again' if number !~ number_format
-  end
+  #def validate!
+   # raise 'Object number has invalid format try to create again' if number !~ number_format
+  #end
 
   def take_each_carriage(&block)
     carriages.each { |carriage| block.call(carriage) }

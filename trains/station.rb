@@ -3,7 +3,8 @@
 class Station
   include InstanceCounter
   include Validation
-
+  extend Accessors
+  
   attr_reader :name
   attr_accessor :trains
 
@@ -16,14 +17,16 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    self.class.validate('name', 'attr_type', String)
+    self.class.validate('name', 'attr_format', /^[A-Z]{1}.+/)
     validate!
     @@stations << self
     register_instance
   end
 
-  def validate!
-    raise 'Wrong name format' if name !~ /^[A-Z]{1}.+/
-  end
+ # def validate!
+  # raise 'Wrong name format' if name !~ /^[A-Z]{1}.+/
+  #end
 
   def train_arrive(train)
     trains << train
