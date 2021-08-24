@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'modules/accessors.rb'
 require_relative 'interface/train_methods'
 require_relative 'interface/station_methods'
 require_relative 'interface/route_methods'
